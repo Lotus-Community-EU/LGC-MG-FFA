@@ -13,7 +13,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import eu.lotusgaming.mg.ffa.event.Chat_LIS;
+import eu.lotusgaming.mg.ffa.main.LotusController;
 import eu.lotusgaming.mg.ffa.main.Main;
+import eu.lotusgaming.mg.ffa.misc.Prefix;
 
 public class FFA_CMD implements CommandExecutor{
 
@@ -27,40 +29,39 @@ public class FFA_CMD implements CommandExecutor{
 			sender.sendMessage(Main.noplayer);
 		}else {
 			Player p = (Player)sender;
+			LotusController lc = new LotusController();
 			if(p.hasPermission("FFA.Admin")) {
 				if(args.length == 0) {
-					p.sendMessage(Main.prefix + "§6FFA §cVersion: §e" + Main.instance.getDescription().getVersion());
-					p.sendMessage(Main.prefix + "§cEntwickelt von: §e" + Main.instance.getDescription().getAuthors());
-					p.sendMessage(Main.prefix + "§7----[§6FFA §5LotusGaming§7]----");
-					p.sendMessage(Main.prefix + "§e/FFA setup §8>> §7Startet die Einrichtung");
-					p.sendMessage(Main.prefix + "§e/FFA build §8>> §aAktiviert§7/§cDeaktiviert §7den Baumodus");
-					p.sendMessage(Main.prefix + "§e/FFA setmapchange <2|3> <setspawn | pos1 | pos2> ");
-					p.sendMessage(Main.prefix + "§e/FFA mapchange now §8>> §7Wechselt die Map sofort!");
-					p.sendMessage(Main.prefix + "§e/FFA reload §8>> §7Lädt die Konfiguration neu!");
-					p.sendMessage(Main.prefix + "");
-					p.sendMessage(Main.prefix + "");
-					p.sendMessage(Main.prefix + "");
-					p.sendMessage(Main.prefix + "");
+					p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§7----[§6FFA " + lc.getPrefix(Prefix.SCOREBOARD) + "§7]----");
+					p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§e/FFA setup §8>> §7Start the setup");
+					p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§e/FFA build §8>> §aEnables§7/§cDisables §7the buildmode");
+					p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§e/FFA setmapchange <2|3> <setspawn | pos1 | pos2> ");
+					p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§e/FFA mapchange now §8>> §7Change the map immediately");
+					p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§e/FFA reload §8>> §7Lädt die Konfiguration neu!");
+					//p.sendMessage(lc.getPrefix(Prefix.MAIN) + "");
+					//p.sendMessage(lc.getPrefix(Prefix.MAIN) + "");
+					//p.sendMessage(lc.getPrefix(Prefix.MAIN) + "");
+					//p.sendMessage(lc.getPrefix(Prefix.MAIN) + "");
 				}else if(args.length == 1) {
 					if(args[0].equalsIgnoreCase("setup")) {
-						p.sendMessage(Main.prefix + "§cBeginnen wir mit dem Spawn §8>> §e/FFA setup setspawn");
+						//p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cBeginnen wir mit dem Spawn §8>> §e/FFA setup setspawn");
 					}else if(args[0].equalsIgnoreCase("build")) {
 						if(build.contains(p.getName())) {
 							build.remove(p.getName());
-							p.sendMessage(Main.prefix + "§7Der §eBaumodus §7wurde §cdeaktiviert!");
+							p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§7Der §eBaumodus §7wurde §cdeaktiviert!");
 						}else {
 							build.add(p.getName());
-							p.sendMessage(Main.prefix + "§7Der §eBaumodus §7wurde §aaktiviert!");
+							p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§7Der §eBaumodus §7wurde §aaktiviert!");
 						}
 					}else if(args[0].equalsIgnoreCase("setmapchange")) {
-						p.sendMessage(Main.prefix + "§cVerwende: §8>> §e/FFA mapchange <2|3> <setspawn> <pos1> <pos2>");
+						p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cVerwende: §8>> §e/FFA mapchange <2|3> <setspawn> <pos1> <pos2>");
 					}else if(args[0].equalsIgnoreCase("reload")) {
 						File config = new File("plugins/LotusFFA/config.yml");
 						@SuppressWarnings("unused")
 						YamlConfiguration configfile = YamlConfiguration.loadConfiguration(config);
-						p.sendMessage(Main.prefix + "§aDie Konfiguration wurde neu geladen!");
+						p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§aDie Konfiguration wurde neu geladen!");
 					}else if(args[0].equalsIgnoreCase("mapchange")) {
-						p.sendMessage(Main.prefix + "§cVerwende: §8>> §e/FFA mapchange <now>");
+						p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cVerwende: §8>> §e/FFA mapchange <now>");
 					}
 				}else if(args.length == 2) {
 					if(args[0].equalsIgnoreCase("setup") && args[1].equalsIgnoreCase("setspawn")) {
@@ -77,8 +78,8 @@ public class FFA_CMD implements CommandExecutor{
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
-						p.sendMessage(Main.prefix + "§aDer §eSpawn §awurde gesetzt!");
-						p.sendMessage(Main.prefix + "§cNun setze die §eErste Position §cfür den Spawnbereich! §8>> §e/FFA setup pos1");
+						p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§aDer §eSpawn §awurde gesetzt!");
+						p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cNun setze die §eErste Position §cfür den Spawnbereich! §8>> §e/FFA setup pos1");
 					}else if(args[0].equalsIgnoreCase("setup") && args[1].equalsIgnoreCase("pos1")) {
 						YamlConfiguration cfg = YamlConfiguration.loadConfiguration(spawn);
 						cfg.set("Spawn.pos1.X", Double.valueOf(p.getLocation().getX()));
@@ -89,8 +90,8 @@ public class FFA_CMD implements CommandExecutor{
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
-						p.sendMessage(Main.prefix + "§ePosition 1 §awurde gesetzt!");
-						p.sendMessage(Main.prefix + "§cNun setze zuletzt die §eZweite Position §cfür den Spawnbereich! §8>> §e/FFA setup pos2");
+						p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§ePosition 1 §awurde gesetzt!");
+						p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cNun setze zuletzt die §eZweite Position §cfür den Spawnbereich! §8>> §e/FFA setup pos2");
 					}else if(args[0].equalsIgnoreCase("setup") && args[1].equalsIgnoreCase("pos2")) {
 						YamlConfiguration cfg = YamlConfiguration.loadConfiguration(spawn);
 						cfg.set("Spawn.pos2.X", Double.valueOf(p.getLocation().getX()));
@@ -101,11 +102,11 @@ public class FFA_CMD implements CommandExecutor{
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
-						p.sendMessage(Main.prefix + "§ePosition 2 §awurde gesetzt!");
-						p.sendMessage(Main.prefix + "§aDas Setup wurde beendet! Der Server wird nun neugestartet!");
+						p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§ePosition 2 §awurde gesetzt!");
+						p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§aDas Setup wurde beendet! Der Server wird nun neugestartet!");
 						Bukkit.getServer().shutdown();
 					}else if(args[0].equalsIgnoreCase("setmapchange") && args[1].equalsIgnoreCase("2")) {
-						p.sendMessage(Main.prefix + "§cVerwende: §8>> §e/FFA mapchange <2|3> <setspawn> <pos1> <pos2>");
+						p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cVerwende: §8>> §e/FFA mapchange <2|3> <setspawn> <pos1> <pos2>");
 					}else if(args[0].equalsIgnoreCase("mapchange") && args[1].equalsIgnoreCase("now")) {
 						File configfile = new File("plugins/LotusFFA/config.yml");
 						YamlConfiguration config = YamlConfiguration.loadConfiguration(configfile);
@@ -123,8 +124,8 @@ public class FFA_CMD implements CommandExecutor{
 								YamlConfiguration cfg = YamlConfiguration.loadConfiguration(spawn);
 								Location loc = p.getLocation();
 								if(cfg.getString("Map2.WORLD") == null) {
-									p.sendMessage(Main.prefix + "§cDas Spiel wurde noch nicht eingerichtet!");
-									p.sendMessage(Main.prefix + "§cRichte es ganz einfach ein mit §e/FFA setup");
+									p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cDas Spiel wurde noch nicht eingerichtet!");
+									p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cRichte es ganz einfach ein mit §e/FFA setup");
 								}
 								loc.setX(cfg.getDouble("Map2.X"));
 								loc.setY(cfg.getDouble("Map2.Y"));
@@ -134,7 +135,7 @@ public class FFA_CMD implements CommandExecutor{
 								loc.setWorld(Bukkit.getWorld(cfg.getString("Map2.WORLD")));
 								all.teleport(loc);
 							}
-							Bukkit.broadcastMessage(Main.prefix + "§7Die Map wurde nun gewechselt zu: §e" + config.getString("ffa.Mapname2"));
+							Bukkit.broadcastMessage(lc.getPrefix(Prefix.MAIN) + "§7Die Map wurde nun gewechselt zu: §e" + config.getString("ffa.Mapname2"));
 						}else if(config.getBoolean("maps.map2") == true) {
 							config.set("maps.map1", false);
 							config.set("maps.map2", false);
@@ -149,8 +150,8 @@ public class FFA_CMD implements CommandExecutor{
 								YamlConfiguration cfg = YamlConfiguration.loadConfiguration(spawn);
 								Location loc = p.getLocation();
 								if(cfg.getString("Map3.WORLD") == null) {
-									p.sendMessage(Main.prefix + "§cDas Spiel wurde noch nicht eingerichtet!");
-									p.sendMessage(Main.prefix + "§cRichte es ganz einfach ein mit §e/FFA setup");
+									p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cDas Spiel wurde noch nicht eingerichtet!");
+									p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cRichte es ganz einfach ein mit §e/FFA setup");
 								}
 								loc.setX(cfg.getDouble("Map3.X"));
 								loc.setY(cfg.getDouble("Map3.Y"));
@@ -160,7 +161,7 @@ public class FFA_CMD implements CommandExecutor{
 								loc.setWorld(Bukkit.getWorld(cfg.getString("Map3.WORLD")));
 								all.teleport(loc);
 							}
-							Bukkit.broadcastMessage(Main.prefix + "§7Die Map wurde nun gewechselt zu: §e" + config.getString("ffa.Mapname3"));
+							Bukkit.broadcastMessage(lc.getPrefix(Prefix.MAIN) + "§7Die Map wurde nun gewechselt zu: §e" + config.getString("ffa.Mapname3"));
 						}else if(config.getBoolean("maps.map3") == true) {
 							config.set("maps.map1", true);
 							config.set("maps.map2", false);
@@ -175,8 +176,8 @@ public class FFA_CMD implements CommandExecutor{
 								YamlConfiguration cfg = YamlConfiguration.loadConfiguration(spawn);
 								Location loc = p.getLocation();
 								if(cfg.getString("Spawn.WORLD") == null) {
-									p.sendMessage(Main.prefix + "§cDas Spiel wurde noch nicht eingerichtet!");
-									p.sendMessage(Main.prefix + "§cRichte es ganz einfach ein mit §e/FFA setup");
+									p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cDas Spiel wurde noch nicht eingerichtet!");
+									p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cRichte es ganz einfach ein mit §e/FFA setup");
 								}
 								loc.setX(cfg.getDouble("Spawn.X"));
 								loc.setY(cfg.getDouble("Spawn.Y"));
@@ -186,7 +187,7 @@ public class FFA_CMD implements CommandExecutor{
 								loc.setWorld(Bukkit.getWorld(cfg.getString("Spawn.WORLD")));
 								all.teleport(loc);
 							}
-							Bukkit.broadcastMessage(Main.prefix + "§7Die Map wurde nun gewechselt zu: §e" + config.getString("ffa.Mapname1"));
+							Bukkit.broadcastMessage(lc.getPrefix(Prefix.MAIN) + "§7Die Map wurde nun gewechselt zu: §e" + config.getString("ffa.Mapname1"));
 						}
 					}
 						
@@ -205,7 +206,7 @@ public class FFA_CMD implements CommandExecutor{
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
-							p.sendMessage(Main.prefix + "§aDer §eSpawn §afür §eMap 2 §awurde gesetzt!");
+							p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§aDer §eSpawn §afür §eMap 2 §awurde gesetzt!");
 						}else if(args[0].equalsIgnoreCase("setmapchange") && args[1].equalsIgnoreCase("3") && args[2].equalsIgnoreCase("setspawn")) {
 							YamlConfiguration cfg = YamlConfiguration.loadConfiguration(spawn);
 							cfg.set("Map3.X", Double.valueOf(p.getLocation().getX()));
@@ -220,7 +221,7 @@ public class FFA_CMD implements CommandExecutor{
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
-							p.sendMessage(Main.prefix + "§aDer §eSpawn §afür §eMap 3 §awurde gesetzt!");
+							p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§aDer §eSpawn §afür §eMap 3 §awurde gesetzt!");
 						}else if(args[0].equalsIgnoreCase("setmapchange") && args[1].equalsIgnoreCase("2") && args[2].equalsIgnoreCase("pos1")) {
 							YamlConfiguration cfg = YamlConfiguration.loadConfiguration(spawn);
 							cfg.set("Map2.pos1.X", Double.valueOf(p.getLocation().getX()));
@@ -231,7 +232,7 @@ public class FFA_CMD implements CommandExecutor{
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
-							p.sendMessage(Main.prefix + "§ePosition 1 §afür §eMap 2 §awurde gesetzt!");
+							p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§ePosition 1 §afür §eMap 2 §awurde gesetzt!");
 						}else if(args[0].equalsIgnoreCase("setmapchange") && args[1].equalsIgnoreCase("2") && args[2].equalsIgnoreCase("pos2")) {
 							YamlConfiguration cfg = YamlConfiguration.loadConfiguration(spawn);
 							cfg.set("Map2.pos2.X", Double.valueOf(p.getLocation().getX()));
@@ -242,7 +243,7 @@ public class FFA_CMD implements CommandExecutor{
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
-							p.sendMessage(Main.prefix + "§ePosition 2 §afür §eMap 2 §awurde gesetzt!");
+							p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§ePosition 2 §afür §eMap 2 §awurde gesetzt!");
 						}else if(args[0].equalsIgnoreCase("setmapchange") && args[1].equalsIgnoreCase("3") && args[2].equalsIgnoreCase("pos1")) {
 							YamlConfiguration cfg = YamlConfiguration.loadConfiguration(spawn);
 							cfg.set("Map3.pos1.X", Double.valueOf(p.getLocation().getX()));
@@ -253,7 +254,7 @@ public class FFA_CMD implements CommandExecutor{
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
-							p.sendMessage(Main.prefix + "§ePosition 1 §afür §eMap 3 §awurde gesetzt!");
+							p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§ePosition 1 §afür §eMap 3 §awurde gesetzt!");
 						}else if(args[0].equalsIgnoreCase("setmapchange") && args[1].equalsIgnoreCase("3") && args[2].equalsIgnoreCase("pos2")) {
 							YamlConfiguration cfg = YamlConfiguration.loadConfiguration(spawn);
 							cfg.set("Map3.pos2.X", Double.valueOf(p.getLocation().getX()));
@@ -264,19 +265,15 @@ public class FFA_CMD implements CommandExecutor{
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
-							p.sendMessage(Main.prefix + "§ePosition 2 §afür §eMap 3 §awurde gesetzt!");
+							p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§ePosition 2 §afür §eMap 3 §awurde gesetzt!");
 						}
 					}
 			}else {
-				p.sendMessage(Main.prefix + "§6FFA §cVersion: §e" + Main.instance.getDescription().getVersion());
-				p.sendMessage(Main.prefix + "§cEntwickelt von: §e" + Main.instance.getDescription().getAuthors());
+				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§6FFA §cVersion: §e" + Main.instance.getDescription().getVersion());
+				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cEntwickelt von: §e" + Main.instance.getDescription().getAuthors());
 			}
 			
-			
 		}
-		
-		
 		return true;
-		
 	}
 }

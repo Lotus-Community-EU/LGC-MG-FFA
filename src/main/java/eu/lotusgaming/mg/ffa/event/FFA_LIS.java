@@ -30,7 +30,9 @@ import org.bukkit.potion.PotionEffectType;
 import eu.lotusgaming.mg.ffa.api.Attackcooldown;
 import eu.lotusgaming.mg.ffa.api.StatsAPI;
 import eu.lotusgaming.mg.ffa.command.FFA_CMD;
+import eu.lotusgaming.mg.ffa.main.LotusController;
 import eu.lotusgaming.mg.ffa.main.Main;
+import eu.lotusgaming.mg.ffa.misc.Prefix;
 
 public class FFA_LIS implements Listener{
 	
@@ -64,17 +66,18 @@ public class FFA_LIS implements Listener{
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
 		YamlConfiguration configfile = YamlConfiguration.loadConfiguration(config);
+		LotusController lc = new LotusController();
 		Player p = e.getPlayer();
 		Attackcooldown.setAttackCooldown(e.getPlayer(), Attackcooldown.attackCooldown);
-		e.setJoinMessage(Main.prefix + "§a" + p.getName() + " §7hat das Spiel betreten!");
+		e.setJoinMessage(lc.getPrefix(Prefix.MAIN) + "§a" + p.getName() + " §7hat das Spiel betreten!");
 		
 		if(configfile.getBoolean("maps.map1") == true) {
-		//	Bukkit.broadcastMessage(Main.prefix + "§aAktuell wird auf §e" + configfile.getString("ffa.Mapname1") + " §agespielt!");
+		//	Bukkit.broadcastMessage(lc.getPrefix(Prefix.MAIN) + "§aAktuell wird auf §e" + configfile.getString("ffa.Mapname1") + " §agespielt!");
 			YamlConfiguration cfg = YamlConfiguration.loadConfiguration(spawn);
 			Location loc = p.getLocation();
 			if(cfg.getString("Spawn.WORLD") == null) {
-				p.sendMessage(Main.prefix + "§cDas Spiel wurde noch nicht eingerichtet!");
-				p.sendMessage(Main.prefix + "§cRichte es ganz einfach ein mit §e/FFA setup");
+				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cDas Spiel wurde noch nicht eingerichtet!");
+				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cRichte es ganz einfach ein mit §e/FFA setup");
 			}
 			loc.setX(cfg.getDouble("Spawn.X"));
 			loc.setY(cfg.getDouble("Spawn.Y"));
@@ -84,12 +87,12 @@ public class FFA_LIS implements Listener{
 			loc.setWorld(Bukkit.getWorld(cfg.getString("Spawn.WORLD")));
 			p.teleport(loc);
 		}else if(configfile.getBoolean("maps.map2") == true) {
-		//	Bukkit.broadcastMessage(Main.prefix + "§aAktuell wird auf §e" + configfile.getString("ffa.Mapname2") + " §agespielt!");
+		//	Bukkit.broadcastMessage(lc.getPrefix(Prefix.MAIN) + "§aAktuell wird auf §e" + configfile.getString("ffa.Mapname2") + " §agespielt!");
 			YamlConfiguration cfg = YamlConfiguration.loadConfiguration(spawn);
 			Location loc = p.getLocation();
 			if(cfg.getString("Map2.WORLD") == null) {
-				p.sendMessage(Main.prefix + "§cDas Spiel wurde noch nicht eingerichtet!");
-				p.sendMessage(Main.prefix + "§cRichte es ganz einfach ein mit §e/FFA setup");
+				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cDas Spiel wurde noch nicht eingerichtet!");
+				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cRichte es ganz einfach ein mit §e/FFA setup");
 			}
 			loc.setX(cfg.getDouble("Map2.X"));
 			loc.setY(cfg.getDouble("Map2.Y"));
@@ -99,12 +102,12 @@ public class FFA_LIS implements Listener{
 			loc.setWorld(Bukkit.getWorld(cfg.getString("Map2.WORLD")));
 			p.teleport(loc);
 		}else if(configfile.getBoolean("maps.map3") == true) {
-		//	Bukkit.broadcastMessage(Main.prefix + "§aAktuell wird auf §e" + configfile.getString("ffa.Mapname3") + " §agespielt!");
+		//	Bukkit.broadcastMessage(lc.getPrefix(Prefix.MAIN) + "§aAktuell wird auf §e" + configfile.getString("ffa.Mapname3") + " §agespielt!");
 			YamlConfiguration cfg = YamlConfiguration.loadConfiguration(spawn);
 			Location loc = p.getLocation();
 			if(cfg.getString("Map3.WORLD") == null) {
-				p.sendMessage(Main.prefix + "§cDas Spiel wurde noch nicht eingerichtet!");
-				p.sendMessage(Main.prefix + "§cRichte es ganz einfach ein mit §e/FFA setup");
+				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cDas Spiel wurde noch nicht eingerichtet!");
+				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cRichte es ganz einfach ein mit §e/FFA setup");
 			}
 			loc.setX(cfg.getDouble("Map3.X"));
 			loc.setY(cfg.getDouble("Map3.Y"));
@@ -130,13 +133,14 @@ public class FFA_LIS implements Listener{
 	@EventHandler
 	public void onRespawn(PlayerRespawnEvent e) {
 		Player p = e.getPlayer();
+		LotusController lc = new LotusController();
 		YamlConfiguration configfile = YamlConfiguration.loadConfiguration(config);
 		if(configfile.getBoolean("maps.map1") == true) {
 			YamlConfiguration cfg = YamlConfiguration.loadConfiguration(spawn);
 			Location loc = p.getLocation();
 			if(cfg.getString("Spawn.WORLD") == null) {
-				p.sendMessage(Main.prefix + "§cDas Spiel wurde noch nicht eingerichtet!");
-				p.sendMessage(Main.prefix + "§cRichte es ganz einfach ein mit §e/FFA setup");
+				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cDas Spiel wurde noch nicht eingerichtet!");
+				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cRichte es ganz einfach ein mit §e/FFA setup");
 			}
 			loc.setX(cfg.getDouble("Spawn.X"));
 			loc.setY(cfg.getDouble("Spawn.Y"));
@@ -150,8 +154,8 @@ public class FFA_LIS implements Listener{
 			YamlConfiguration cfg = YamlConfiguration.loadConfiguration(spawn);
 			Location loc = p.getLocation();
 			if(cfg.getString("Map2.WORLD") == null) {
-				p.sendMessage(Main.prefix + "§cDas Spiel wurde noch nicht eingerichtet!");
-				p.sendMessage(Main.prefix + "§cRichte es ganz einfach ein mit §e/FFA setup");
+				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cDas Spiel wurde noch nicht eingerichtet!");
+				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cRichte es ganz einfach ein mit §e/FFA setup");
 			}
 			loc.setX(cfg.getDouble("Map2.X"));
 			loc.setY(cfg.getDouble("Map2.Y"));
@@ -162,12 +166,12 @@ public class FFA_LIS implements Listener{
 			p.teleport(loc);
 			e.setRespawnLocation(loc);
 		}else if(configfile.getBoolean("maps.map3") == true) {
-			Bukkit.broadcastMessage(Main.prefix + "§aAktuell wird auf §e" + configfile.getString("ffa.Mapname3") + " §agespielt!");
+			Bukkit.broadcastMessage(lc.getPrefix(Prefix.MAIN) + "§aAktuell wird auf §e" + configfile.getString("ffa.Mapname3") + " §agespielt!");
 			YamlConfiguration cfg = YamlConfiguration.loadConfiguration(spawn);
 			Location loc = p.getLocation();
 			if(cfg.getString("Map3.WORLD") == null) {
-				p.sendMessage(Main.prefix + "§cDas Spiel wurde noch nicht eingerichtet!");
-				p.sendMessage(Main.prefix + "§cRichte es ganz einfach ein mit §e/FFA setup");
+				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cDas Spiel wurde noch nicht eingerichtet!");
+				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cRichte es ganz einfach ein mit §e/FFA setup");
 			}
 			loc.setX(cfg.getDouble("Map3.X"));
 			loc.setY(cfg.getDouble("Map3.Y"));
@@ -185,9 +189,10 @@ public class FFA_LIS implements Listener{
 	@EventHandler
 	public void onKill(PlayerDeathEvent e) {
 		Player p = e.getEntity();
+		LotusController lc = new LotusController();
         if(p.getLastDamageCause().getCause() == DamageCause.ENTITY_ATTACK) {
         	Player k = e.getEntity().getKiller();
-        	e.setDeathMessage(Main.prefix + "§a" +p.getName()+ "§e wurde von §a" + k.getName() + " §egetötet!");
+        	e.setDeathMessage(lc.getPrefix(Prefix.MAIN) + "§a" +p.getName()+ "§e wurde von §a" + k.getName() + " §egetötet!");
         	StatsAPI.addDeaths(p.getUniqueId().toString(), 1);
         	StatsAPI.addKills(k.getUniqueId().toString(), 1);
         	/* So könntest du dem Spieler noch Coins zuweisen pro Kill! :)
@@ -198,7 +203,7 @@ public class FFA_LIS implements Listener{
             k.getInventory().addItem(createItem(Material.ARROW, 3, null));
             k.getInventory().addItem(createItem(Material.GOLDEN_APPLE, 1, null));
         }else {
-        	e.setDeathMessage(Main.prefix + "§a" + p.getName() + "§7 ist gestorben!");
+        	e.setDeathMessage(lc.getPrefix(Prefix.MAIN) + "§a" + p.getName() + "§7 ist gestorben!");
         	StatsAPI.addDeaths(p.getUniqueId().toString(), 1);
         }
 	}
@@ -206,8 +211,9 @@ public class FFA_LIS implements Listener{
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e) {
 		Player p = e.getPlayer();
+		LotusController lc = new LotusController();
 		Attackcooldown.setAttackCooldown(e.getPlayer(), Attackcooldown.VANILLA_ATTACK_SPEED);
-		e.setQuitMessage(Main.prefix + "§c" + p.getName() + " §7hat das Spiel verlassen!");
+		e.setQuitMessage(lc.getPrefix(Prefix.MAIN) + "§c" + p.getName() + " §7hat das Spiel verlassen!");
 		FFA_CMD.build.remove(p.getName());
 	}
 	

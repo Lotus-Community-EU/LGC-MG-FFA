@@ -11,7 +11,7 @@ public class MySQL {
 	static Connection connection;
 	
 	/* CoinsSystem ist auch drin falls du das verwenden willst! :) */
-	static String sqlprefix = "§7[§eCoin-System§7] ";
+	static String sqlprefix = "§7[§eMySQL§7] ";
 	
 	public static void connect(String host, String port, String database, String username, String password) {
 		if(!isConnected()) {

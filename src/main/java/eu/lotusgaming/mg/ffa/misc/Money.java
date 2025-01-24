@@ -3,6 +3,7 @@ package eu.lotusgaming.mg.ffa.misc;
 
 public enum Money {
 	BANK,
-	POCKET;
+	POCKET,
+	COMBINED;
 }
 

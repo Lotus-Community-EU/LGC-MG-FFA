@@ -15,7 +15,6 @@ public class Stats_CMD implements CommandExecutor{
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		
 		if(!(sender instanceof Player)) {
 			sender.sendMessage(Main.noplayer);
 		}else {
@@ -23,36 +22,36 @@ public class Stats_CMD implements CommandExecutor{
 			LotusController lc = new LotusController();
 			if(args.length == 0) {
 				
-				double kills = StatsAPI.getKills(p.getUniqueId().toString());
-				double tode = StatsAPI.getDeaths(p.getUniqueId().toString());
+				double kills = new StatsAPI(p).getKills();
+				double tode = new StatsAPI(p).getDeaths();
 				double kd = (kills / tode);
 				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§7----[§6Deine FFA Stats§7]----");
-				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§7Deine Kills: §6" + kills);
-				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§7Deine Tode: §6" + tode);
-				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§7Deine K/D: §6" + kd);
+				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§7Your Kills: §6" + kills);
+				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§7Your Deaths: §6" + tode);
+				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§7Your K/D: §6" + kd);
 			}else if(args.length == 1) {
-				if(!p.hasPermission("FFA.statsother")) {
-					lc.noPerm(p, "FFA.statsother");
+				if(!p.hasPermission("lgc.command.statsother")) {
+					lc.noPerm(p, "lgc.command.statsother");
 				}else {
 					Player target = Bukkit.getPlayer(args[0]);
 					if(target != null) {
-						double kills = StatsAPI.getKills(target.getUniqueId().toString());
-						double tode = StatsAPI.getDeaths(target.getUniqueId().toString());
-						double kd = (kills/tode);
-						p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§7----[§a" + target.getName() + " §6FFA Stats§7]----");
-						p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§7Kills: §6" + kills);
-						p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§7Tode: §6" + tode);
-						p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§7K/D: §6" + kd);
+						if(new StatsAPI(target).hasMGAccount()) {
+							double kills = new StatsAPI(target).getKills();
+							double tode = new StatsAPI(target).getDeaths();
+							double kd = (kills/tode);
+							p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§7----[§a" + target.getName() + " §6FFA Stats§7]----");
+							p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§7Kills: §6" + kills);
+							p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§7Deaths: §6" + tode);
+							p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§7K/D: §6" + kd);
+						}else {
+							p.sendMessage(lc.getPrefix(Prefix.MAIN) + lc.sendMessageToFormat(p, "command.mg_ffa.stats.noStats").replace("%target%", target.getName()));
+						}
 					}else {
-						p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cDieser Spieler ist aktuell nicht verfügbar!");
+						lc.sendMessageReady(p, "general.playerOffline");
 					}
 				}
 			}
 		}
-		
 		return true;
 	}
-	
-	
-
 }

@@ -31,13 +31,17 @@ import eu.lotusgaming.mg.ffa.api.Attackcooldown;
 import eu.lotusgaming.mg.ffa.api.StatsAPI;
 import eu.lotusgaming.mg.ffa.command.FFA_CMD;
 import eu.lotusgaming.mg.ffa.main.LotusController;
-import eu.lotusgaming.mg.ffa.main.Main;
+import eu.lotusgaming.mg.ffa.misc.Money;
 import eu.lotusgaming.mg.ffa.misc.Prefix;
 
 public class FFA_LIS implements Listener{
 	
-	static File spawn = new File("plugins/LotusFFA/spawn.yml");
 	static File config = new File("plugins/LotusFFA/config.yml");
+	static YamlConfiguration cfg = null;
+	
+	{
+		cfg = YamlConfiguration.loadConfiguration(config);
+	}
 	
 	public void removePotionEffect(Player p) {
 		for(PotionEffect ef : p.getActivePotionEffects()) {
@@ -47,76 +51,42 @@ public class FFA_LIS implements Listener{
 	
 	/* Inventar für das Game!  */
 	public void giveInventory(Player p) {
+		LotusController lc = new LotusController();
 		p.setGameMode(GameMode.SURVIVAL);
 		p.setHealth(20);
 		p.setFoodLevel(20);
 		p.setLevel(0);
 		p.getInventory().clear();
-		p.getInventory().setItem(0, createItem(Material.IRON_SWORD, 1, null));
-		p.getInventory().setItem(1, createItem(Material.BOW, 1, null));
-		p.getInventory().setItem(6, createItem(Material.GOLDEN_APPLE, 2, null));
-		p.getInventory().setItem(7, createItem(Material.ARROW, 8, null));
-		p.getInventory().setItem(8, createItem(Material.FISHING_ROD, 1, null));
-		p.getInventory().setHelmet(createItem(Material.IRON_HELMET, 1, null));
-		p.getInventory().setChestplate(createItem(Material.DIAMOND_CHESTPLATE, 1, null));
-		p.getInventory().setLeggings(createItem(Material.IRON_LEGGINGS, 1, null));
-		p.getInventory().setBoots(createItem(Material.IRON_BOOTS, 1, null));
+		p.getInventory().setItem(0, lc.defItem(Material.IRON_SWORD, null, 1));
+		p.getInventory().setItem(1, lc.defItem(Material.BOW, null, 1));
+		p.getInventory().setItem(6, lc.defItem(Material.GOLDEN_APPLE, null, 2));
+		p.getInventory().setItem(7, lc.defItem(Material.ARROW, null, 8));
+		p.getInventory().setItem(8, lc.defItem(Material.FISHING_ROD, null, 1));
+		p.getInventory().setHelmet(lc.defItem(Material.IRON_HELMET, null, 1));
+		p.getInventory().setChestplate(lc.defItem(Material.DIAMOND_CHESTPLATE, null, 1));
+		p.getInventory().setLeggings(lc.defItem(Material.IRON_LEGGINGS, null, 1));
+		p.getInventory().setBoots(lc.defItem(Material.IRON_BOOTS, null, 1));
 	}
 	
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
-		YamlConfiguration configfile = YamlConfiguration.loadConfiguration(config);
 		LotusController lc = new LotusController();
 		Player p = e.getPlayer();
 		Attackcooldown.setAttackCooldown(e.getPlayer(), Attackcooldown.attackCooldown);
 		e.setJoinMessage(lc.getPrefix(Prefix.MAIN) + "§a" + p.getName() + " §7hat das Spiel betreten!");
-		
-		if(configfile.getBoolean("maps.map1") == true) {
-		//	Bukkit.broadcastMessage(lc.getPrefix(Prefix.MAIN) + "§aAktuell wird auf §e" + configfile.getString("ffa.Mapname1") + " §agespielt!");
-			YamlConfiguration cfg = YamlConfiguration.loadConfiguration(spawn);
-			Location loc = p.getLocation();
-			if(cfg.getString("Spawn.WORLD") == null) {
-				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cDas Spiel wurde noch nicht eingerichtet!");
-				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cRichte es ganz einfach ein mit §e/FFA setup");
-			}
-			loc.setX(cfg.getDouble("Spawn.X"));
-			loc.setY(cfg.getDouble("Spawn.Y"));
-			loc.setZ(cfg.getDouble("Spawn.Z"));
-			loc.setYaw((float)cfg.getDouble("Spawn.YAW"));
-			loc.setPitch((float)cfg.getDouble("Spawn.PITCH"));
-			loc.setWorld(Bukkit.getWorld(cfg.getString("Spawn.WORLD")));
-			p.teleport(loc);
-		}else if(configfile.getBoolean("maps.map2") == true) {
-		//	Bukkit.broadcastMessage(lc.getPrefix(Prefix.MAIN) + "§aAktuell wird auf §e" + configfile.getString("ffa.Mapname2") + " §agespielt!");
-			YamlConfiguration cfg = YamlConfiguration.loadConfiguration(spawn);
-			Location loc = p.getLocation();
-			if(cfg.getString("Map2.WORLD") == null) {
-				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cDas Spiel wurde noch nicht eingerichtet!");
-				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cRichte es ganz einfach ein mit §e/FFA setup");
-			}
-			loc.setX(cfg.getDouble("Map2.X"));
-			loc.setY(cfg.getDouble("Map2.Y"));
-			loc.setZ(cfg.getDouble("Map2.Z"));
-			loc.setYaw((float)cfg.getDouble("Map2.YAW"));
-			loc.setPitch((float)cfg.getDouble("Map2.PITCH"));
-			loc.setWorld(Bukkit.getWorld(cfg.getString("Map2.WORLD")));
-			p.teleport(loc);
-		}else if(configfile.getBoolean("maps.map3") == true) {
-		//	Bukkit.broadcastMessage(lc.getPrefix(Prefix.MAIN) + "§aAktuell wird auf §e" + configfile.getString("ffa.Mapname3") + " §agespielt!");
-			YamlConfiguration cfg = YamlConfiguration.loadConfiguration(spawn);
-			Location loc = p.getLocation();
-			if(cfg.getString("Map3.WORLD") == null) {
-				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cDas Spiel wurde noch nicht eingerichtet!");
-				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cRichte es ganz einfach ein mit §e/FFA setup");
-			}
-			loc.setX(cfg.getDouble("Map3.X"));
-			loc.setY(cfg.getDouble("Map3.Y"));
-			loc.setZ(cfg.getDouble("Map3.Z"));
-			loc.setYaw((float)cfg.getDouble("Map3.YAW"));
-			loc.setPitch((float)cfg.getDouble("Map3.PITCH"));
-			loc.setWorld(Bukkit.getWorld(cfg.getString("Map3.WORLD")));
-			p.teleport(loc);
+		Location loc = p.getLocation();
+		if(cfg.getString("Spawn.WORLD") == null) {
+			p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cDas Spiel wurde noch nicht eingerichtet!");
+			p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cRichte es ganz einfach ein mit §e/FFA setup");
 		}
+		//TODO: UN-HARDCODE!!!!!!
+		loc.setX(cfg.getDouble("Spawn.X"));
+		loc.setY(cfg.getDouble("Spawn.Y"));
+		loc.setZ(cfg.getDouble("Spawn.Z"));
+		loc.setYaw((float)cfg.getDouble("Spawn.YAW"));
+		loc.setPitch((float)cfg.getDouble("Spawn.PITCH"));
+		loc.setWorld(Bukkit.getWorld(cfg.getString("Spawn.WORLD")));
+		p.teleport(loc);
 		
 		giveInventory(p);
 		removePotionEffect(p);
@@ -125,8 +95,8 @@ public class FFA_LIS implements Listener{
 			Chat_LIS.Tablist();
 		}
 		
-		if(!StatsAPI.playerExists(p.getUniqueId().toString())) {
-			StatsAPI.createPlayer(p.getUniqueId().toString());
+		if(!new StatsAPI(p).hasMGAccount()) {
+			new StatsAPI(p).createMGAccount();
 		}
 	}
 	
@@ -134,54 +104,19 @@ public class FFA_LIS implements Listener{
 	public void onRespawn(PlayerRespawnEvent e) {
 		Player p = e.getPlayer();
 		LotusController lc = new LotusController();
-		YamlConfiguration configfile = YamlConfiguration.loadConfiguration(config);
-		if(configfile.getBoolean("maps.map1") == true) {
-			YamlConfiguration cfg = YamlConfiguration.loadConfiguration(spawn);
-			Location loc = p.getLocation();
-			if(cfg.getString("Spawn.WORLD") == null) {
-				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cDas Spiel wurde noch nicht eingerichtet!");
-				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cRichte es ganz einfach ein mit §e/FFA setup");
-			}
-			loc.setX(cfg.getDouble("Spawn.X"));
-			loc.setY(cfg.getDouble("Spawn.Y"));
-			loc.setZ(cfg.getDouble("Spawn.Z"));
-			loc.setYaw((float)cfg.getDouble("Spawn.YAW"));
-			loc.setPitch((float)cfg.getDouble("Spawn.PITCH"));
-			loc.setWorld(Bukkit.getWorld(cfg.getString("Spawn.WORLD")));
-			p.teleport(loc);
-			e.setRespawnLocation(loc);
-		}else if(configfile.getBoolean("maps.map2") == true) {
-			YamlConfiguration cfg = YamlConfiguration.loadConfiguration(spawn);
-			Location loc = p.getLocation();
-			if(cfg.getString("Map2.WORLD") == null) {
-				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cDas Spiel wurde noch nicht eingerichtet!");
-				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cRichte es ganz einfach ein mit §e/FFA setup");
-			}
-			loc.setX(cfg.getDouble("Map2.X"));
-			loc.setY(cfg.getDouble("Map2.Y"));
-			loc.setZ(cfg.getDouble("Map2.Z"));
-			loc.setYaw((float)cfg.getDouble("Map2.YAW"));
-			loc.setPitch((float)cfg.getDouble("Map2.PITCH"));
-			loc.setWorld(Bukkit.getWorld(cfg.getString("Map2.WORLD")));
-			p.teleport(loc);
-			e.setRespawnLocation(loc);
-		}else if(configfile.getBoolean("maps.map3") == true) {
-			Bukkit.broadcastMessage(lc.getPrefix(Prefix.MAIN) + "§aAktuell wird auf §e" + configfile.getString("ffa.Mapname3") + " §agespielt!");
-			YamlConfiguration cfg = YamlConfiguration.loadConfiguration(spawn);
-			Location loc = p.getLocation();
-			if(cfg.getString("Map3.WORLD") == null) {
-				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cDas Spiel wurde noch nicht eingerichtet!");
-				p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cRichte es ganz einfach ein mit §e/FFA setup");
-			}
-			loc.setX(cfg.getDouble("Map3.X"));
-			loc.setY(cfg.getDouble("Map3.Y"));
-			loc.setZ(cfg.getDouble("Map3.Z"));
-			loc.setYaw((float)cfg.getDouble("Map3.YAW"));
-			loc.setPitch((float)cfg.getDouble("Map3.PITCH"));
-			loc.setWorld(Bukkit.getWorld(cfg.getString("Map3.WORLD")));
-			p.teleport(loc);
-			e.setRespawnLocation(loc);
+		Location loc = p.getLocation();
+		if(cfg.getString("Spawn.WORLD") == null) {
+			p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cDas Spiel wurde noch nicht eingerichtet!");
+			p.sendMessage(lc.getPrefix(Prefix.MAIN) + "§cRichte es ganz einfach ein mit §e/FFA setup");
 		}
+		loc.setX(cfg.getDouble("Spawn.X"));
+		loc.setY(cfg.getDouble("Spawn.Y"));
+		loc.setZ(cfg.getDouble("Spawn.Z"));
+		loc.setYaw((float)cfg.getDouble("Spawn.YAW"));
+		loc.setPitch((float)cfg.getDouble("Spawn.PITCH"));
+		loc.setWorld(Bukkit.getWorld(cfg.getString("Spawn.WORLD")));
+		p.teleport(loc);
+		e.setRespawnLocation(loc);
 		
 		giveInventory(p);
 	}
@@ -192,19 +127,18 @@ public class FFA_LIS implements Listener{
 		LotusController lc = new LotusController();
         if(p.getLastDamageCause().getCause() == DamageCause.ENTITY_ATTACK) {
         	Player k = e.getEntity().getKiller();
-        	e.setDeathMessage(lc.getPrefix(Prefix.MAIN) + "§a" +p.getName()+ "§e wurde von §a" + k.getName() + " §egetötet!");
-        	StatsAPI.addDeaths(p.getUniqueId().toString(), 1);
-        	StatsAPI.addKills(k.getUniqueId().toString(), 1);
-        	/* So könntest du dem Spieler noch Coins zuweisen pro Kill! :)
-        	 * 
-        	 * CoinsAPI.addCoinsDB(p.getUniqueId().toString(), 50);
-        	 */
+        	e.setDeathMessage(lc.getPrefix(Prefix.MAIN) + "§a" + p.getName() + " §ehas been killed by §a" + k.getName() + " §e!");
+        	StatsAPI sapi = new StatsAPI(p);
+        	StatsAPI kapi = new StatsAPI(k);
+        	sapi.addDeath();
+        	kapi.addKill();
+        	new LotusController().addMoney(p, 50, Money.BANK);
             k.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 80, 2));
-            k.getInventory().addItem(createItem(Material.ARROW, 3, null));
-            k.getInventory().addItem(createItem(Material.GOLDEN_APPLE, 1, null));
+            k.getInventory().addItem(lc.defItem(Material.ARROW, null, 3));
+            k.getInventory().addItem(lc.defItem(Material.GOLDEN_APPLE, null, 1));
         }else {
-        	e.setDeathMessage(lc.getPrefix(Prefix.MAIN) + "§a" + p.getName() + "§7 ist gestorben!");
-        	StatsAPI.addDeaths(p.getUniqueId().toString(), 1);
+        	e.setDeathMessage(lc.getPrefix(Prefix.MAIN) + "§a" + p.getName() + "§7 died!");
+        	new StatsAPI(p).addDeath();
         }
 	}
 	
@@ -255,11 +189,9 @@ public class FFA_LIS implements Listener{
 	
 	@EventHandler
 	public void onInteract(PlayerInteractEvent e) {
-	  @SuppressWarnings("unused")
-	Player p = e.getPlayer();
-	  if(e.getAction() == Action.PHYSICAL) {
-	    e.setCancelled(true);
-	  }
+		if(e.getAction() == Action.PHYSICAL) {
+			e.setCancelled(true);
+		}
 	}
 	
 	@EventHandler
@@ -271,14 +203,4 @@ public class FFA_LIS implements Listener{
 			e.setCancelled(true);
 		}
 	}
-
-	public static ItemStack createItem(Material material, int amount, String displayname) {
-		ItemStack item = new ItemStack(material, amount);
-        ItemMeta mitem = item.getItemMeta();
-        mitem.setDisplayName(displayname);
-        item.setItemMeta(mitem);
-        return item;
-    }
-	
-	
 }

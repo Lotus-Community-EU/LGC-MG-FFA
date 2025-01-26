@@ -1,0 +1,9 @@
+name: LotusFFA
+authors: [Gianlucaptrs, MauriceLPs]
+version: 1.0.0
+main: eu.lotusgaming.mg.ffa.main.Main
+
+commands:
+    ffa:
+    stats:
+    
